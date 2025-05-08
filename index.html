@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Personnages</title>
+</head>
+<body>
+    <h1>Liste des personnages (API sécurisée)</h1>
+    <ul id="personnages"></ul>
+
+    <script>
+        fetch("http://127.0.0.1:8000/personnages", {
+            method: "GET",
+            headers: {
+                "token": "secret123"
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erreur API : " + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const ul = document.getElementById("personnages");
+            data.forEach(p => {
+                const li = document.createElement("li");
+                li.textContent = `${p.nom} - ${p.role}`;
+                ul.appendChild(li);
+            });
+        })
+        .catch(error => {
+            console.error("Erreur :", error);
+            alert("Accès refusé ou problème de CORS !");
+        });
+    </script>
+</body>
+</html>
